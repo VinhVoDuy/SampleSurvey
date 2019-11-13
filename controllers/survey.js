@@ -2,6 +2,22 @@ const db = require('../models');
 const { validateSubmission } = require('../services/validates/survey');
 
 module.exports = {
+  getSurveyFromId: async (req, res) => {
+    const survey = await db.Survey.findByPk(req.params.id);
+
+    if (!survey) return res.status(404).send('Survey is not found.');
+
+    return res.send({
+      id: survey.id,
+      eventCode: survey.eventCode,
+      submissions: survey.submissions,
+      totalScore: survey.totalScore,
+      avgScore: survey.avgScore,
+      startTime: survey.startTime,
+      endTime: survey.endTime
+    });
+  },
+
   getSurveyFromEventCode: async (req, res) => {
     const eventCode = req.params.eventCode;
     const survey = await db.Survey.findOne({ where: { eventCode } });
