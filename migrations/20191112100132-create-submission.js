@@ -26,7 +26,7 @@ module.exports = {
         onDelete: 'cascade',
         onUpdate: 'cascade'
       },
-      answerId: {
+      answerIds: {
         type: Sequelize.ARRAY(Sequelize.INTEGER)
       },
       createdAt: {

@@ -5,7 +5,7 @@ const db = require('../models');
 router.post('/register', async (req, res) => {
   // const { error } = ValidateRegister(req.body);
   // if (error) return res.status(400).send(error.details[0].message);
-  let user = await db.User.findOne({ email: req.body.email });
+  let user = await db.User.findOne({ where: { email: req.body.email } });
   if (user) return res.status(400).send('Email has been registered.');
 
   const salt = await bcrypt.genSalt(10);

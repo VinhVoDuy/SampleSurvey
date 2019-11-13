@@ -8,8 +8,8 @@ module.exports = (sequelize, DataTypes) => {
     endTime: DataTypes.DATE
   }, {});
   Survey.associate = function (models) {
-    Survey.hasOne(models.Submission);
-    Survey.hasOne(models.Question);
+    // Survey.hasOne(models.Submission);
+    // Survey.hasOne(models.Question);
   };
   return Survey;
 };

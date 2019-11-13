@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
 
   User.associate = function (models) {
-    User.hasOne(models.Submission);
+    // User.hasOne(models.Submission, { foreignKey: 'userId' });
   };
 
   User.prototype.generateAuthToken = function () {
