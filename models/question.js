@@ -5,8 +5,8 @@ module.exports = (sequelize, DataTypes) => {
     surveyId: DataTypes.INTEGER
   }, {});
   Question.associate = function (models) {
-    // Question.belongsTo(models.Survey);
-    // Question.hasOne(models.Answer);
+    Question.belongsTo(models.Survey, { foreignKey: 'surveyId' });
+    Question.hasOne(models.Answer, { foreignKey: 'questionId' });
   };
   return Question;
 };

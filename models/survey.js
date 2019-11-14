@@ -14,8 +14,8 @@ module.exports = (sequelize, DataTypes) => {
     }
   });
   Survey.associate = function (models) {
-    // Survey.hasOne(models.Submission);
-    // Survey.hasOne(models.Question);
+    Survey.hasOne(models.Submission, { foreignKey: 'surveyId' });
+    Survey.hasOne(models.Question, { foreignKey: 'surveyId' });
   };
   return Survey;
 };
