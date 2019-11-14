@@ -14,43 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     // associations can be defined here
     Submission.belongsTo(models.User, { foreignKey: 'userId' });
     Submission.belongsTo(models.Survey, { foreignKey: 'surveyId' });
-
-    models.Submission.prototype.updateSurvey = async function (newAnswerIds, options) {
-      const survey = await models.Survey.findOne({ where: { surveyId: this.surveyId } });
-
-      const newAnswers = await models.Answer.findAll({
-        where: {
-          id: {
-            [Op.in]: newAnswerIds
-          }
-        }
-      });
-
-
-      newAnswers.forEach(a => {
-        survey.totalScore += a.score;
-      });
-      survey.submissions += 1;
-
-      if (options.new === false) {
-        const oldAnswer = await models.Answer.findAll({
-          where: {
-            id: {
-              [Op.in]: this.answerIds
-            }
-          }
-        });
-
-        oldAnswer.forEach(a => {
-          survey.totalScore -= a.score;
-        });
-        survey.submissions -= 1;
-      }
-
-      await survey.save();
-    }
-  };
-
+  }
 
   return Submission;
 };

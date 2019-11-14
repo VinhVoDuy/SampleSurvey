@@ -1,9 +1,12 @@
-const db = require('../models');
-const { validateSubmission } = require('../services/validates/survey');
+const { Survey, Submission } = require('../models');
+const {
+  updateSurveyNewSubmission,
+  updateSurveyOldSubmission
+} = require('../services/survey');
 
 module.exports = {
   getSurveyFromId: async (req, res) => {
-    const survey = await db.Survey.findByPk(req.params.id);
+    const survey = await Survey.findByPk(req.params.id);
 
     if (!survey) return res.status(404).send('Survey is not found.');
 
@@ -20,30 +23,30 @@ module.exports = {
 
   getSurveyFromEventCode: async (req, res) => {
     const eventCode = req.params.eventCode;
-    const survey = await db.Survey.findOne({ where: { eventCode } });
+    const survey = await Survey.findOne({ where: { eventCode } });
     if (!survey) return res.status(404).send('Survey is not found.');
 
     return res.send(survey);
   },
 
-  submmit: async (req, res) => {
-    const { error } = validateSubmission(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
-
+  submit: async (req, res) => {
     const { userId, surveyId, answerIds } = req.body;
 
-    let submission = await db.Submission.findOne({ where: { userId, surveyId } });
+    let submission = await Submission.findOne({ where: { userId, surveyId } });
     if (!submission) {
-      submission = await db.Submission.create({
+      submission = await Submission.create({
         userId,
         surveyId,
         answerIds
       });
-      await submission.updateSurvey(answerIds, { new: true });
+      // await submission.updateSurvey(answerIds, { new: true });
+      await updateSurveyNewSubmission(surveyId, answerIds);
     } else {
       // MUST update the survey (totalScore and number of submissions) 
       // before update the existing submission itself.
-      await submission.updateSurvey(answerIds, { new: false });
+      // await submission.updateSurvey(answerIds, { new: false });
+      const oldAnswerIds = submission.answerIds;
+      await updateSurveyOldSubmission(surveyId, oldAnswerIds, answerIds);
       await submission.update({ answerIds });
     }
 
