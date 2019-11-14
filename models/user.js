@@ -1,4 +1,3 @@
-'use strict';
 const jwt = require('jsonwebtoken');
 const keys = require('../config/keys');
 
@@ -7,24 +6,25 @@ module.exports = (sequelize, DataTypes) => {
     email: {
       type: DataTypes.STRING,
       validate: {
-        isEmail: true
-      }
+        isEmail: true,
+      },
     },
     password: DataTypes.STRING,
-    idAdmin: DataTypes.BOOLEAN
+    idAdmin: DataTypes.BOOLEAN,
   }, {});
 
   User.associate = function (models) {
     // User.hasOne(models.Submission, { foreignKey: 'userId' });
   };
 
+  // Should not be here: Sorry but I don't prefer a single logic in model
   User.prototype.generateAuthToken = function () {
     return jwt.sign({
       id: this.id,
       email: this.email,
-      isAdmin: this.isAdmin
+      isAdmin: this.isAdmin,
     }, keys.jwtPrivateKey);
-  }
+  };
 
   return User;
 };
