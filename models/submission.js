@@ -46,9 +46,13 @@ module.exports = (sequelize, DataTypes) => {
         oldAnswer.forEach((a) => {
           survey.totalScore -= a.score;
         });
+        // submissionsChanges
+        // scoreChanges
         survey.submissions -= 1;
       }
 
+      // update scores = scores + newTotal - oldTotal;
+      // update submissions = submissions + 1;
       await survey.save();
     };
   };
