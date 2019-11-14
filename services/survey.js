@@ -19,7 +19,8 @@ module.exports = {
 
     await Survey.update({
       totalScore: sequelize.literal(`"totalScore" + ${newScore}`),
-      submissions: sequelize.literal('submissions + 1')
+      submissions: sequelize.literal('submissions + 1'),
+      avgScore: sequelize.literal('totalScore / submissions')
     }, { where: { id: surveyId } });
   },
 
@@ -56,6 +57,10 @@ module.exports = {
 
     await Survey.update({
       totalScore: sequelize.literal(`"totalScore" + ${diffScore}`),
+    }, { where: { id: surveyId } });
+
+    await Survey.update({
+      avgScore: sequelize.literal('"totalScore" / submissions')
     }, { where: { id: surveyId } });
   }
 }
