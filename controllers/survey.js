@@ -60,8 +60,6 @@ module.exports = {
       sequelize.transaction((t) => {
         return updateSurveyOldSubmission(surveyId, oldAnswers, newAnswers)
           .then(() => {
-            const start = Date.now();
-            while (Date.now() - start < 3000) { }
             return submission.update({ answerIds })
           });
       })
