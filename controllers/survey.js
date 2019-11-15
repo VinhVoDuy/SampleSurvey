@@ -37,20 +37,22 @@ module.exports = {
       //   await updateSurveyNewSubmission(surveyId, newAnswers);
 
       sequelize.transaction((t) => {
-        return Submission.create({
-          userId,
-          surveyId,
-          answerIds
-        }).then((submission) => {
-          return updateSurveyNewSubmission(surveyId, newAnswers)
-            .then(() => {
-              return res.send(submission);
+        return updateSurveyNewSubmission(surveyId, newAnswers)
+          .then(() => {
+            return Submission.create({
+              userId,
+              surveyId,
+              answerIds
             });
-        }).catch((err) => {
+          })
+      })
+        .then((result) => {
+          return res.send(result);
+        })
+        .catch((err) => {
           res.status(500).send("Failed to submit");
           throw err;
         });
-      });
     } else {
       const oldAnswerIds = submission.answerIds;
       const oldAnswers = await populateAnswers(oldAnswerIds, surveyId);
@@ -58,16 +60,18 @@ module.exports = {
       sequelize.transaction((t) => {
         return updateSurveyOldSubmission(surveyId, oldAnswers, newAnswers)
           .then(() => {
+            const start = Date.now();
+            while (Date.now() - start < 3000) { }
             return submission.update({ answerIds })
-              .then((submission) => {
-                return res.send(submission);
-              });
-          })
-          .catch((err) => {
-            res.status(500).send("Failed to update the submission");
-            throw err;
           });
-      });
+      })
+        .then((result) => {
+          return res.send(result);
+        })
+        .catch((err) => {
+          res.status(500).send("Failed to update the submission");
+          throw err;
+        });
       // return res.send(submission);
     }
   }
