@@ -4,7 +4,7 @@ function validateUserRegister(req, res, next) {
   const schema = Joi.object().keys({
     email: Joi.string().email().max(255).required(),
     password: Joi.string().min(8).max(50).required(),
-    isAdmin: Joi.boolean()
+    isAdmin: Joi.boolean(),
   });
 
   const { error } = Joi.validate(req.body, schema);
@@ -17,7 +17,7 @@ function validateUserRegister(req, res, next) {
 function validateUserLogin(req, res, next) {
   const schema = Joi.object().keys({
     email: Joi.string().email().max(255).required(),
-    password: Joi.string().max(255).required()
+    password: Joi.string().max(255).required(),
   });
 
   const { error } = Joi.validate(req.body, schema);
@@ -26,6 +26,7 @@ function validateUserLogin(req, res, next) {
 
   next();
 }
-
+// module.exports = { validateUserRegister, validateUserLogin };
+// ???
 exports.validateUserRegister = validateUserRegister;
 exports.validateUserLogin = validateUserLogin;
