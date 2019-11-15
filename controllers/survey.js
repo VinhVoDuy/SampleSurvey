@@ -48,6 +48,7 @@ module.exports = {
       // before update the existing submission itself.
       // await submission.updateSurvey(answerIds, { new: false });
       const oldAnswerIds = submission.answerIds;
+      // transaction required
       await updateSurveyOldSubmission(surveyId, oldAnswerIds, answerIds);
       await submission.update({ answerIds });
     }
