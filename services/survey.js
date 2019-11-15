@@ -1,26 +1,39 @@
-const { Sequelize, sequelize, Survey, Answer } = require('../models');
+const {
+  Sequelize, sequelize, Survey, Answer,
+} = require('../models');
+
+// remove unused things
 const Op = Sequelize.Op;
 
+//
+// These 2 functions share a lot of logics. Can DRY here ?
+//
 module.exports = {
   updateSurveyNewSubmission: async (surveyId, newAnswerIds) => {
+    // use functional to remove the useless state & side-effect
     let newScore = 0;
 
+    // need to check if answerIds is in the questions of the survey
+    // what if the answer is not belong to the survey ?
     const newAnswers = await Answer.findAll({
       where: {
         id: {
-          [Op.in]: newAnswerIds
-        }
-      }
+          [Op.in]: newAnswerIds,
+        },
+      },
     });
 
-    newAnswers.forEach(a => {
+    // Why not Functional ??
+    // newAnswers.reduce((sum, score) => sum + score, 0);
+    //
+    newAnswers.forEach((a) => {
       newScore += a.score;
     });
 
     await Survey.update({
       totalScore: sequelize.literal(`"totalScore" + ${newScore}`),
       submissions: sequelize.literal('submissions + 1'),
-      avgScore: sequelize.literal('totalScore / submissions')
+      avgScore: sequelize.literal('totalScore / submissions'),
     }, { where: { id: surveyId } });
   },
 
@@ -32,24 +45,24 @@ module.exports = {
     const newAnswers = await Answer.findAll({
       where: {
         id: {
-          [Op.in]: newAnswerIds
-        }
-      }
+          [Op.in]: newAnswerIds,
+        },
+      },
     });
 
-    newAnswers.forEach(a => {
+    newAnswers.forEach((a) => {
       newScore += a.score;
     });
 
     const oldAnswers = await Answer.findAll({
       where: {
         id: {
-          [Op.in]: oldAnswerIds
-        }
-      }
+          [Op.in]: oldAnswerIds,
+        },
+      },
     });
 
-    oldAnswers.forEach(a => {
+    oldAnswers.forEach((a) => {
       oldScore += a.score;
     });
 
@@ -57,10 +70,12 @@ module.exports = {
 
     await Survey.update({
       totalScore: sequelize.literal(`"totalScore" + ${diffScore}`),
+      //  avgScore: sequelize.literal(`("totalScore" + ${diffScore}) / submissions`),
     }, { where: { id: surveyId } });
 
+    // twice db accesses
     await Survey.update({
-      avgScore: sequelize.literal('"totalScore" / submissions')
+      avgScore: sequelize.literal('"totalScore" / submissions'),
     }, { where: { id: surveyId } });
-  }
-}
+  },
+};
