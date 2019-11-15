@@ -1,6 +1,6 @@
 const { User } = require('../models');
 const bcrypt = require('bcrypt');
-const { generateAuthToken } = require('../services/user');
+const { generateAuthToken } = require('../services/user/generateToken');
 
 module.exports = {
   register: async (req, res) => {
