@@ -1,4 +1,4 @@
-const { Survey, Submission } = require('../models');
+const { sequelize, Survey, Submission } = require('../models');
 const validateAndPopulateAnswers = require('../services/survey/validateAnswer.js');
 const populateAnswers = require('../services/survey/populateOldAnswer');
 const updateSurveyNewSubmission = require('../services/survey/updateNewSub');
@@ -25,24 +25,51 @@ module.exports = {
     const { userId, surveyId, answerIds } = req.body;
 
     const newAnswers = await validateAndPopulateAnswers(answerIds, surveyId);
+    if (newAnswers.error) return res.status(400).send(newAnswers.error.message);
 
     let submission = await Submission.findOne({ where: { userId, surveyId } });
     if (!submission) {
-      submission = await Submission.create({
-        userId,
-        surveyId,
-        answerIds
+      //   submission = await Submission.create({
+      //     userId,
+      //     surveyId,
+      //     answerIds
+      //   });
+      //   await updateSurveyNewSubmission(surveyId, newAnswers);
+
+      sequelize.transaction((t) => {
+        return Submission.create({
+          userId,
+          surveyId,
+          answerIds
+        }).then((submission) => {
+          return updateSurveyNewSubmission(surveyId, newAnswers)
+            .then(() => {
+              return res.send(submission);
+            });
+        }).catch((err) => {
+          res.status(500).send("Failed to submit");
+          throw err;
+        });
       });
-      await updateSurveyNewSubmission(surveyId, newAnswers);
     } else {
-      // MUST update the survey (totalScore and number of submissions) 
-      // before update the existing submission itself.
       const oldAnswerIds = submission.answerIds;
       const oldAnswers = await populateAnswers(oldAnswerIds, surveyId);
-      await submission.update({ answerIds });
-      await updateSurveyOldSubmission(surveyId, oldAnswers, newAnswers);
-    }
 
-    return res.send(submission);
+      sequelize.transaction((t) => {
+        return updateSurveyOldSubmission(surveyId, oldAnswers, newAnswers)
+          .then(() => {
+            return submission.update({ answerIds })
+              .then((submission) => {
+                return res.send(submission);
+              });
+          })
+          .catch((err) => {
+            res.status(500).send("Failed to update the submission");
+            throw err;
+          });
+      });
+      // return res.send(submission);
+    }
   }
 }
+

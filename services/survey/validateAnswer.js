@@ -19,7 +19,7 @@ module.exports = validateAndPopulateAnswers = async (answerIds, surveyId) => {
   // Check if there's any answers from same question.
   const validatedAnswerIds = [...new Set(populatedAnswers.map(a => { return a.questionId }))];
   if (validatedAnswerIds.length !== answerIds.length) {
-    throw new Error("Invalid answerId(s)");
+    return { error: { message: 'Invalid answerId(s).' } }
   } else {
     return populatedAnswers;
   }
