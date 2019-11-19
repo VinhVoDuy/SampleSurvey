@@ -20,11 +20,16 @@
   "dependencies": {
     "bcrypt": "^3.0.6",
     "continuation-local-storage": "^3.2.1",
+    "cookie-parser": "^1.4.4",
     "express": "^4.17.1",
     "express-async-errors": "^3.1.1",
+    "express-session": "^1.17.0",
     "joi": "^14.3.1",
     "jsonwebtoken": "^8.5.1",
+    "passport": "^0.4.0",
+    "passport-facebook": "^3.0.0",
     "pg": "^7.12.1",
+    "request": "^2.88.0",
     "sequelize": "^5.21.2",
     "sequelize-cli": "^5.5.1"
   }

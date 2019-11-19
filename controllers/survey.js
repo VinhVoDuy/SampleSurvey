@@ -29,13 +29,6 @@ module.exports = {
 
     let submission = await Submission.findOne({ where: { userId, surveyId } });
     if (!submission) {
-      //   submission = await Submission.create({
-      //     userId,
-      //     surveyId,
-      //     answerIds
-      //   });
-      //   await updateSurveyNewSubmission(surveyId, newAnswers);
-
       sequelize.transaction((t) => {
         return updateSurveyNewSubmission(surveyId, newAnswers)
           .then(() => {
@@ -70,7 +63,6 @@ module.exports = {
           res.status(500).send("Failed to update the submission");
           throw err;
         });
-      // return res.send(submission);
     }
   }
 }

@@ -6,7 +6,8 @@ module.exports = {
     return jwt.sign({
       id: user.id,
       email: user.email,
-      isAdmin: user.isAdmin
+      isAdmin: user.isAdmin,
+      facebookId: user.facebookId
     }, keys.jwtPrivateKey);
   },
 }

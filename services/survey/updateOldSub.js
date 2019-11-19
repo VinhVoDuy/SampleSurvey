@@ -1,6 +1,6 @@
 const { sequelize, Survey } = require('../../models');
 
-module.exports = updateSurveyOldSubmission = (surveyId, oldAnswers, newAnswers) => {
+const updateSurveyOldSubmission = (surveyId, oldAnswers, newAnswers) => {
   const newScore = newAnswers.reduce((a, c) => a + c.score, 0);
   const oldScore = oldAnswers.reduce((a, c) => a + c.score, 0);
   const diffScore = newScore - oldScore;
@@ -10,3 +10,5 @@ module.exports = updateSurveyOldSubmission = (surveyId, oldAnswers, newAnswers) 
     avgScore: sequelize.literal(`("totalScore" + ${diffScore}) / submissions`)
   }, { where: { id: surveyId } });
 }
+
+module.exports = updateSurveyOldSubmission;

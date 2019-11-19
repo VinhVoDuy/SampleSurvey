@@ -29,5 +29,11 @@ module.exports = {
     const token = generateAuthToken(user);
 
     return res.send(token);
+  },
+
+  facebookLogin: async (req, res) => {
+    const token = generateAuthToken(req.user);
+
+    return res.send(token);
   }
 }

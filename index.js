@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 require("express-async-errors");
+require("./startups/auth");
 require('./startups/routes')(app);
 
 process.on('unhandledRejection', (err) => {
