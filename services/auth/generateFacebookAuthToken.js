@@ -3,5 +3,5 @@ const _ = require('lodash');
 const keys = require('../../config/keys');
 
 module.exports = function generateFacebookAuthToken(user) {
-  return jwt.sign(_.pick(user, ['id', 'facebookId']), keys.jwtPrivateKey);
+  return jwt.sign(_.pick(user, ['id', 'facebookId']), keys.jwtPrivateKey, { expiresIn: '15m' });
 }
