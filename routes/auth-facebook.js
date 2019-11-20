@@ -1,15 +1,10 @@
 const router = require('express').Router();
-const passport = require('passport');
 const redirectToLoginPage = require('../middlewares/redirectToLoginPage');
 const { loginSucess, loginByAccessToken } = require('../controllers/auth-facebook');
-// router.get('/', passport.authenticate('facebook'));
-// router.get('/callback',
-//   passport.authenticate('facebook'),
-//   (req, res) => {
-//     res.redirect('/api/user/facebook-login');
-//   })
+const validateAccessToken = require('../middlewares/validateAccessToken');
+
 router.get('/', redirectToLoginPage);
 router.get('/success', loginSucess);
-router.get('/access_token', loginByAccessToken);
+router.get('/access_token', validateAccessToken, loginByAccessToken);
 
 module.exports = router;

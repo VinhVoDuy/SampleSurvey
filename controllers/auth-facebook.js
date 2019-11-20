@@ -10,7 +10,7 @@ module.exports = {
     const access_token = await getAccessTokenFromCode(code);
     const profile = await getProfileFromAccessToken(access_token);
 
-    const user = await User.findOrCreate({
+    const [user] = await User.findOrCreate({
       where: {
         facebookId: profile.id
       },
@@ -21,7 +21,7 @@ module.exports = {
       }
     });
 
-    const token = generateFacebookAuthToken(user[0]);
+    const token = generateFacebookAuthToken(user);
 
     return res.send(token);
   },
@@ -29,7 +29,7 @@ module.exports = {
   loginByAccessToken: async (req, res) => {
     const profile = await getProfileFromAccessToken(req.query['access_token']);
 
-    const user = await User.findOrCreate({
+    const [user] = await User.findOrCreate({
       where: {
         facebookId: profile.id
       },
@@ -40,8 +40,8 @@ module.exports = {
       }
     });
 
-    const token = generateFacebookAuthToken(user[0]);
+    const token = generateFacebookAuthToken(user);
 
     return res.send(token);
-  }
+  },
 }

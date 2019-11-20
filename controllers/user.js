@@ -1,18 +1,18 @@
 const { User } = require('../models');
 const bcrypt = require('bcrypt');
-const { generateAuthToken } = require('../services/user/generateToken');
+const generateAuthToken = require('../services/user/generateToken');
+const hashPassword = require('../services/user/hashPassword');
 
 module.exports = {
   register: async (req, res) => {
     let user = await User.findOne({ where: { email: req.body.email } });
     if (user) return res.status(400).send('Email has been registered.');
 
-    const salt = await bcrypt.genSalt(10);
-    const hash = await bcrypt.hash(req.body.password, salt);
+    const hashed = await hashPassword(req.body.password);
 
     user = await User.create({
       email: req.body.email,
-      password: hash,
+      password: hashed,
       isAdmin: req.body.isAdmin || null
     });
 
