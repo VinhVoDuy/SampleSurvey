@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const { register, login, facebookLogin } = require('../controllers/user');
-const { validateUserLogin, validateUserRegister } = require('../middlewares/user');
+const { validateUserLogin, validateUserRegister } = require('../middlewares/validateUser');
 
 router.post('/register', validateUserRegister, register);
 router.post('/login', validateUserLogin, login);
