@@ -21,7 +21,7 @@ module.exports = (app) => {
 
   app.use('/api/user', user);
   app.use('/api/survey', survey);
-  app.use('/auth/facebook', authFacebook);
+  app.use('/api/auth/facebook', authFacebook);
 
   app.use(function (req, res, next) {
     const err = new Error('Not found');

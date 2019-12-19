@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       // }
     },
     password: DataTypes.STRING,
-    idAdmin: DataTypes.BOOLEAN,
+    isAdmin: DataTypes.BOOLEAN,
     facebookId: DataTypes.STRING
   }, {});
 

@@ -1,4 +1,4 @@
-const Joi = require('joi');
+const Joi = require("joi");
 
 function validateSubmission(req, res, next) {
   const schema = Joi.object().keys({
@@ -14,4 +14,4 @@ function validateSubmission(req, res, next) {
   next();
 }
 
-exports.validateSubmission = validateSubmission;
+module.exports = validateSubmission;

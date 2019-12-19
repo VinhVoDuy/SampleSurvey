@@ -1,6 +1,7 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Survey = sequelize.define('Survey', {
+    title: DataTypes.STRING,
     eventCode: DataTypes.STRING,
     totalScore: DataTypes.INTEGER,
     submissions: DataTypes.INTEGER,
@@ -9,8 +10,8 @@ module.exports = (sequelize, DataTypes) => {
     endTime: DataTypes.DATE
   }, {});
   Survey.associate = function (models) {
-    Survey.hasOne(models.Submission, { foreignKey: 'surveyId' });
-    Survey.hasOne(models.Question, { foreignKey: 'surveyId' });
+    Survey.hasMany(models.Submission, { foreignKey: 'surveyId' });
+    Survey.hasMany(models.Question, { as: 'questions', foreignKey: 'surveyId' });
   };
   return Survey;
 };

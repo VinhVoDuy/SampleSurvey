@@ -27,5 +27,4 @@ function validateUserLogin(req, res, next) {
   next();
 }
 
-exports.validateUserRegister = validateUserRegister;
-exports.validateUserLogin = validateUserLogin;
+module.exports = { validateUserLogin, validateUserRegister };
