@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
     submissions: DataTypes.INTEGER,
     avgScore: DataTypes.FLOAT,
     startTime: DataTypes.DATE,
-    endTime: DataTypes.DATE
+    endTime: DataTypes.DATE,
   }, {});
   Survey.associate = function (models) {
     Survey.hasMany(models.Submission, { foreignKey: 'surveyId' });

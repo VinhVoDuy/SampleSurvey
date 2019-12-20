@@ -13,6 +13,9 @@ module.exports = {
         {model: Question, as: 'questions', include: [
           {model: Answer, as: 'answers'}
         ]}
+      ],
+      order: [
+        [{model: Question, as: 'questions'}, 'createdAt', 'asc']
       ]
     });
 

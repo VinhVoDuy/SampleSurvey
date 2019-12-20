@@ -16,7 +16,7 @@ module.exports = (app) => {
   app.use(passport.initialize());
   app.use(passport.session());
   app.get('/', (req, res) => {
-    res.send('Welcome to survey service.');
+    res.send('Welcome to Survey service.');
   });
 
   app.use('/api/user', user);
