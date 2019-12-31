@@ -10,12 +10,14 @@ module.exports = {
   getSurveyFromId: async (req, res) => {
     const survey = await Survey.findByPk(req.params.id, {
       include: [
-        {model: Question, as: 'questions', include: [
-          {model: Answer, as: 'answers'}
-        ]}
+        {
+          model: Question, as: 'questions', include: [
+            { model: Answer, as: 'answers' }
+          ]
+        }
       ],
       order: [
-        [{model: Question, as: 'questions'}, 'createdAt', 'asc']
+        [{ model: Question, as: 'questions' }, 'createdAt', 'asc']
       ]
     });
 
