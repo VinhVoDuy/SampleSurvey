@@ -11,7 +11,7 @@ module.exports = async (req, res) => {
       eventCode,
       startTime,
       endTime
-    }).then((survey) => {
+    }).then(survey => {
       return Promise.all(
         questions.map(({ description, answers }) => Question.create({
           surveyId: survey.id,
