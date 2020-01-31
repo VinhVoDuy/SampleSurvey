@@ -1,13 +1,16 @@
 const { sequelize, Submission } = require('../../models');
-const validateAndPopulateAnswers = require('../../services/survey/validateAnswer.js');
+const validateAndPopulateAnswers = require('../../services/survey/validateAnswer');
 const populateAnswers = require('../../services/survey/populateOldAnswer');
 const updateSurveyNewSubmission = require('../../services/survey/updateNewSub');
 const updateSurveyOldSubmission = require('../../services/survey/updateOldSub');
 
+
 module.exports = async (req, res) => {
   const { userId, surveyId, answerIds } = req.body;
 
+  // console.log(require.cache['/Users/2359media/survey/node-projects/SampleSurvey/services/survey/validateAnswer.js']);
   const newAnswers = await validateAndPopulateAnswers(answerIds, surveyId);
+  console.log(newAnswers);
   if (newAnswers.error) return res.status(400).send(newAnswers.error.message);
 
   let submission = await Submission.findOne({ where: { userId, surveyId } });

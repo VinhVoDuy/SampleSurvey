@@ -1,7 +1,7 @@
 const { Sequelize, Answer, Question } = require('../../models');
 const Op = Sequelize.Op;
 
-module.exports = validateAndPopulateAnswers = async (answerIds, surveyId) => {
+module.exports = async (answerIds, surveyId) => {
   const populatedAnswers = await Answer.findAll({
     where: {
       id: {

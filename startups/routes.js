@@ -1,6 +1,7 @@
 const express = require('express');
 const passport = require('passport');
 const session = require('express-session');
+const cors = require('cors');
 
 const user = require('../routes/user');
 const survey = require('../routes/survey');
@@ -15,6 +16,12 @@ module.exports = (app) => {
   }));
   app.use(passport.initialize());
   app.use(passport.session());
+
+  const corsOptions = {
+    origin: 'http://localhost:3001'
+  }
+  app.use(cors(corsOptions));
+
   app.get('/', (req, res) => {
     res.send('Welcome to Survey service.');
   });

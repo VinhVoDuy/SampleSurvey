@@ -21,13 +21,16 @@ module.exports = async (req, res) => {
             answers.map(({ description, score }) =>
               Answer.create({
                 questionId: question.id,
-                description, score
-              })));
+                description,
+                score
+              })))
+            .then(() => {
+              return res.send(survey);
+            })
         })))
     })
-  }).then(() => {
-    return res.send("Survey is successfully created.");
-  }).catch(e => {
-    res.status(500).send("Failed to create the survey.");
-  });
+  })
+    .catch(e => {
+      res.status(500).send("Failed to create the survey.");
+    });
 }
